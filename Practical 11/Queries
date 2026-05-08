@@ -1,0 +1,25 @@
+-- Setup: Create database, tables, and insert sample data
+CREATE DATABASE IF NOT EXISTS Practical11DB; USE Practical11DB; CREATE TABLE Department (DeptID INT PRIMARY KEY, DeptName VARCHAR(50)); CREATE TABLE Student (RollNo INT PRIMARY KEY, Name VARCHAR(50), Marks FLOAT, DeptID INT, FOREIGN KEY (DeptID) REFERENCES Department(DeptID)); INSERT INTO Department VALUES (1, 'Computer'), (2, 'IT'); INSERT INTO Student VALUES (101, 'Aditya', 85.5, 1), (102, 'Rahul', 78.0, 2), (103, 'Sneha', 92.5, 1);
+
+-- 1. Create a Simple View: Restricts data to only show students with marks above 80 (hides other students)
+CREATE VIEW HighScorers AS SELECT RollNo, Name, Marks FROM Student WHERE Marks > 80;
+
+-- 2. Create a Complex View: Hides the complex JOIN syntax, making it easy to fetch student names with their department names
+CREATE VIEW StudentDetails AS SELECT S.RollNo, S.Name, D.DeptName FROM Student S JOIN Department D ON S.DeptID = D.DeptID;
+
+-- 3. Query the Views: You treat views exactly like regular tables when querying them
+SELECT * FROM HighScorers;
+SELECT * FROM StudentDetails;
+
+-- 4. Modify/Manage a View: Use CREATE OR REPLACE to update an existing view's logic (e.g., change the threshold to 90)
+CREATE OR REPLACE VIEW HighScorers AS SELECT RollNo, Name, Marks FROM Student WHERE Marks >= 90;
+
+-- 5. Drop a View: Delete the view when it is no longer needed (this does NOT delete the underlying data in the base tables)
+DROP VIEW HighScorers;
+
+Verification
+-- View all tables AND views in the current database
+SHOW FULL TABLES;
+
+-- Show the exact structure/columns of your specific view
+DESCRIBE StudentDetails;
