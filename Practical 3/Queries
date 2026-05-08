@@ -1,0 +1,16 @@
+-- Create and use the new database
+CREATE DATABASE Practical3DB;
+USE Practical3DB;
+
+-- Create Parent Table with PRIMARY KEY, UNIQUE, and NOT NULL constraints
+CREATE TABLE Department ( DeptID INT PRIMARY KEY, DeptCode VARCHAR(10) UNIQUE NOT NULL, DeptName VARCHAR(50) NOT NULL );
+
+-- Create Child Table with PRIMARY KEY, NOT NULL, CHECK, DEFAULT, and FOREIGN KEY constraints
+CREATE TABLE Student ( RollNo INT PRIMARY KEY, Name VARCHAR(50) NOT NULL, Age INT CHECK (Age >= 18), EnrollmentStatus VARCHAR(20) DEFAULT 'Active', DeptID INT, FOREIGN KEY (DeptID) REFERENCES Department(DeptID) ON DELETE SET NULL ON UPDATE CASCADE );
+
+**Verification**
+-- View the constraints on the Department table (Keys and Nullability)
+DESCRIBE Department;
+
+-- View the constraints on the Student table
+DESCRIBE Student;
