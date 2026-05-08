@@ -1,0 +1,22 @@
+-- Setup: Create database, table, and insert sample records
+CREATE DATABASE IF NOT EXISTS Practical5DB; USE Practical5DB; CREATE TABLE IF NOT EXISTS Student (RollNo INT PRIMARY KEY, Name VARCHAR(50), Marks FLOAT, City VARCHAR(50));
+INSERT INTO Student (RollNo, Name, Marks, City) VALUES (1, 'Amit', 85.0, 'Pune'), (2, 'Rahul', 72.5, 'Mumbai'), (3, 'Sneha', 91.0, 'Satara'), (4, 'Anjali', 88.0, 'Pune'), (5, 'Karan', 65.0, 'Nashik');
+
+-- Relational Operator: Find students with marks greater than or equal to 80
+SELECT * FROM Student WHERE Marks >= 80;
+
+-- Relational Operator: Find students who do NOT live in 'Pune'
+SELECT * FROM Student WHERE City != 'Pune';
+
+-- Pattern Matching: Find students whose Name starts with the letter 'A'
+SELECT * FROM Student WHERE Name LIKE 'A%';
+
+-- Pattern Matching: Find students whose Name ends with the letter 'a'
+SELECT * FROM Student WHERE Name LIKE '%a';
+
+-- Pattern Matching: Find students whose Name has 'a' as the second character
+SELECT * FROM Student WHERE Name LIKE '_a%';
+
+Verficatioon
+-- Bonus combination: Starts with 'A' AND has marks > 85
+SELECT * FROM Student WHERE Name LIKE 'A%' AND Marks > 85;
