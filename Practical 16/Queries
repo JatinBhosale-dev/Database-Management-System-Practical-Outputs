@@ -1,0 +1,48 @@
+Database Setup
+
+-- Setup: Create database and a Student table
+CREATE DATABASE IF NOT EXISTS Practical16DB; USE Practical16DB; CREATE TABLE IF NOT EXISTS Student (RollNo INT PRIMARY KEY, Name VARCHAR(50), Dept VARCHAR(50), Marks FLOAT DEFAULT 0.0);
+
+Creating Modular Stored Procedures
+
+-- Change the delimiter from ; to //
+DELIMITER //
+
+-- Module 1: Procedure to Enroll a New Student
+CREATE PROCEDURE EnrollStudent(IN p_RollNo INT, IN p_Name VARCHAR(50), IN p_Dept VARCHAR(50))
+BEGIN
+    INSERT INTO Student (RollNo, Name, Dept) VALUES (p_RollNo, p_Name, p_Dept);
+    SELECT CONCAT('Student ', p_Name, ' enrolled successfully.') AS Status;
+END //
+
+-- Module 2: Procedure to Update Student Marks
+CREATE PROCEDURE UpdateMarks(IN p_RollNo INT, IN p_NewMarks FLOAT)
+BEGIN
+    UPDATE Student SET Marks = p_NewMarks WHERE RollNo = p_RollNo;
+    SELECT CONCAT('Marks updated for RollNo ', p_RollNo) AS Status;
+END //
+
+-- Change the delimiter back to standard semicolon
+DELIMITER ;
+
+Verification (Using the Modules)
+
+-- Use Module 1 to enroll students
+CALL EnrollStudent(1, 'Aditya', 'Computer');
+CALL EnrollStudent(2, 'Rahul', 'IT');
+CALL EnrollStudent(3, 'Sneha', 'Computer');
+
+-- Check the table (Marks will be 0.0 because of our DEFAULT constraint)
+SELECT * FROM Student;
+
+-- Use Module 2 to update their marks modularly
+CALL UpdateMarks(1, 88.5);
+CALL UpdateMarks(2, 75.0);
+CALL UpdateMarks(3, 92.0);
+
+-- Check the table to verify the updates worked
+SELECT * FROM Student;
+
+how to view the procedures you've created in the database, you can use this command:
+-- Shows all stored procedures in the current database
+SHOW PROCEDURE STATUS WHERE Db = 'Practical16DB';
