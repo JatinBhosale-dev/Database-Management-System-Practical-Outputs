@@ -1,0 +1,25 @@
+-- Setup: Create database, table, and insert sample records
+CREATE DATABASE IF NOT EXISTS Practical7DB; USE Practical7DB; CREATE TABLE IF NOT EXISTS Student (RollNo INT PRIMARY KEY, Name VARCHAR(50), Dept VARCHAR(50), Marks FLOAT);
+INSERT INTO Student (RollNo, Name, Dept, Marks) VALUES (1, 'Aditya', 'Computer', 85.0), (2, 'Rahul', 'IT', 78.5), (3, 'Sneha', 'Computer', 92.0), (4, 'Priya', 'Mechanical', 65.0), (5, 'Karan', 'IT', 88.0);
+
+-- 1. COUNT: Find the total number of students in the table
+SELECT COUNT(*) AS TotalStudents FROM Student;
+
+-- 2. SUM: Calculate the sum of all marks (just for demonstration purposes)
+SELECT SUM(Marks) AS TotalMarks FROM Student;
+
+-- 3. AVG: Calculate the overall average marks of the class
+SELECT AVG(Marks) AS AverageMarks FROM Student;
+
+-- 4. MIN: Find the lowest marks scored by any student
+SELECT MIN(Marks) AS LowestMarks FROM Student;
+
+-- 5. MAX: Find the highest marks scored by any student
+SELECT MAX(Marks) AS HighestMarks FROM Student;
+
+Verificatioon
+-- Count how many students are in EACH department
+SELECT Dept, COUNT(*) AS NumberOfStudents FROM Student GROUP BY Dept;
+
+-- Find the average marks for EACH department
+SELECT Dept, AVG(Marks) AS DeptAverageMarks FROM Student GROUP BY Dept;
