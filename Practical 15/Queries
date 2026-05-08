@@ -1,0 +1,65 @@
+Database Setup
+
+-- Setup: Create database, tables, and insert sample data
+CREATE DATABASE IF NOT EXISTS Practical15DB; USE Practical15DB; 
+CREATE TABLE IF NOT EXISTS Employee (EmpID INT PRIMARY KEY, Name VARCHAR(50), Salary FLOAT);
+CREATE TABLE IF NOT EXISTS HighEarners (EmpID INT, Name VARCHAR(50));
+INSERT INTO Employee VALUES (1, 'Aditya', 45000), (2, 'Rahul', 55000), (3, 'Sneha', 70000), (4, 'Vikram', 48000);
+
+Implicit Cursor Demonstration
+-- Perform an update
+UPDATE Employee SET Salary = Salary + 2000 WHERE Salary < 50000;
+
+-- Check the implicit cursor's affected rows
+SELECT ROW_COUNT() AS RowsUpdated_By_Implicit_Cursor;
+
+Explicit Cursor Implementation (Stored Procedure)
+-- Change the delimiter from ; to //
+DELIMITER //
+
+CREATE PROCEDURE ProcessHighEarners()
+BEGIN
+    -- 1. Declare variables to hold row data
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_EmpID INT;
+    DECLARE v_Name VARCHAR(50);
+    
+    -- 2. DECLARE the Explicit Cursor
+    DECLARE emp_cursor CURSOR FOR SELECT EmpID, Name FROM Employee WHERE Salary > 50000;
+    
+    -- 3. Declare a handler for when the cursor runs out of rows (NOT FOUND)
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    
+    -- 4. OPEN the Cursor
+    OPEN emp_cursor;
+    
+    -- 5. Start the Loop to FETCH rows
+    read_loop: LOOP
+        FETCH emp_cursor INTO v_EmpID, v_Name;
+        
+        -- Check if we hit the end of the data
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        -- Process the row (Insert into the new table)
+        INSERT INTO HighEarners (EmpID, Name) VALUES (v_EmpID, v_Name);
+    END LOOP;
+    
+    -- 6. CLOSE the Cursor to free memory
+    CLOSE emp_cursor;
+    
+END //
+
+-- Change the delimiter back to standard semicolon
+DELIMITER ;
+
+Verification 
+-- Check table before procedure (Should be empty)
+SELECT * FROM HighEarners;
+
+-- Execute the explicit cursor logic
+CALL ProcessHighEarners();
+
+-- Check table after procedure (Should contain Rahul and Sneha)
+SELECT * FROM HighEarners;
