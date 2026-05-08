@@ -1,0 +1,23 @@
+-- Setup: Create database, tables, and insert overlapping sample records
+CREATE DATABASE IF NOT EXISTS Practical6DB; USE Practical6DB; CREATE TABLE ProjectA (StudentID INT, Name VARCHAR(50)); CREATE TABLE ProjectB (StudentID INT, Name VARCHAR(50));
+INSERT INTO ProjectA VALUES (1, 'Amit'), (2, 'Rahul'), (3, 'Sneha');
+INSERT INTO ProjectB VALUES (2, 'Rahul'), (3, 'Sneha'), (4, 'Anjali');
+
+-- 1. UNION: Get a list of ALL unique students across both projects (removes duplicates like Rahul and Sneha)
+SELECT StudentID, Name FROM ProjectA UNION SELECT StudentID, Name FROM ProjectB;
+
+-- 2. UNION ALL: Get a list of all students in both projects (keeps duplicates, showing Rahul and Sneha twice)
+SELECT StudentID, Name FROM ProjectA UNION ALL SELECT StudentID, Name FROM ProjectB;
+
+-- 3. INTERSECT: Find students who are working on BOTH Project A and Project B
+SELECT StudentID, Name FROM ProjectA INTERSECT SELECT StudentID, Name FROM ProjectB;
+
+-- 4. EXCEPT: Find students who are ONLY in Project A and not in Project B
+SELECT StudentID, Name FROM ProjectA EXCEPT SELECT StudentID, Name FROM ProjectB;
+
+Verification
+-- Workaround for INTERSECT (Using INNER JOIN)
+SELECT A.StudentID, A.Name FROM ProjectA A INNER JOIN ProjectB B ON A.StudentID = B.StudentID;
+
+-- Workaround for EXCEPT (Using NOT IN)
+SELECT StudentID, Name FROM ProjectA WHERE StudentID NOT IN (SELECT StudentID FROM ProjectB);
