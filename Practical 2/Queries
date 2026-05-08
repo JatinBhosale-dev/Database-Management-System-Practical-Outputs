@@ -1,0 +1,34 @@
+-- 1. CREATE: Create a new database and a Student table
+CREATE DATABASE Practical2DB;
+USE Practical2DB;
+CREATE TABLE Student ( RollNo INT PRIMARY KEY, Name VARCHAR(50), Dept VARCHAR(50) );
+
+-- 2. ALTER (ADD): Add a new column 'Marks' to the table
+ALTER TABLE Student ADD COLUMN Marks FLOAT;
+
+-- 3. ALTER (MODIFY): Change the datatype size of the 'Name' column
+ALTER TABLE Student MODIFY COLUMN Name VARCHAR(100);
+
+-- 4. ALTER (DROP): Remove the 'Dept' column from the table
+ALTER TABLE Student DROP COLUMN Dept;
+
+-- 5. RENAME: Change the name of the table
+RENAME TABLE Student TO UniversityStudent;
+
+-- 6. TRUNCATE: Remove all rows/data from the table (structure remains)
+TRUNCATE TABLE UniversityStudent;
+
+-- 7. DROP: Completely delete the table and then the database
+DROP TABLE UniversityStudent;
+DROP DATABASE Practical2DB;
+
+**Results**
+-- View all databases (use after CREATE DATABASE)
+SHOW DATABASES;
+
+-- View table structure (use after CREATE and ALTER commands to show changes)
+DESCRIBE Student; 
+-- (or DESCRIBE UniversityStudent; after renaming)
+
+-- View tables in the current database (use after DROP TABLE to show it's gone)
+SHOW TABLES;
