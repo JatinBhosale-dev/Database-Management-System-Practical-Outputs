@@ -1,0 +1,21 @@
+-- Setup: Create database, table, and insert sample records
+CREATE DATABASE IF NOT EXISTS Practical8DB; USE Practical8DB; CREATE TABLE IF NOT EXISTS Student (RollNo INT PRIMARY KEY, Name VARCHAR(50), Dept VARCHAR(50), Marks FLOAT);
+INSERT INTO Student (RollNo, Name, Dept, Marks) VALUES (1, 'Aditya', 'Computer', 85.0), (2, 'Rahul', 'IT', 78.5), (3, 'Sneha', 'Computer', 92.0), (4, 'Priya', 'Mechanical', 65.0), (5, 'Karan', 'IT', 88.0), (6, 'Vikram', 'Mechanical', 72.0);
+
+-- 1. ORDER BY (Ascending): Sort all students alphabetically by their Name
+SELECT * FROM Student ORDER BY Name ASC;
+
+-- 2. ORDER BY (Descending): Sort all students by their Marks, from highest to lowest
+SELECT * FROM Student ORDER BY Marks DESC;
+
+-- 3. GROUP BY: Find the total number of students in EACH department
+SELECT Dept, COUNT(*) AS TotalStudents FROM Student GROUP BY Dept;
+
+-- 4. GROUP BY with HAVING: Find departments where the average marks are greater than 75
+SELECT Dept, AVG(Marks) AS AverageMarks FROM Student GROUP BY Dept HAVING AVG(Marks) > 75;
+
+-- 5. Combined (GROUP BY + ORDER BY): Calculate average marks per department and sort the result from highest to lowest average
+SELECT Dept, AVG(Marks) AS AverageMarks FROM Student GROUP BY Dept ORDER BY AverageMarks DESC;
+
+NOTE 
+If the examiner asks why you used HAVING instead of WHERE in query 4, tell them: "The WHERE clause cannot be used with aggregate functions like AVG(). WHERE filters individual rows before grouping, while HAVING filters the groups after the GROUP BY operation."
