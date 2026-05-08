@@ -1,6 +1,6 @@
 Design any database with at least two entities and relationships between them. Draw suitable ER/EER diagram for the system.
 
-# Practical 1: Database Design and ER Diagram
+# Practical 1: Database Design and ER Diagram (MySQL on Ubuntu)
 
 **Question:** Design any database with at least two entities and relationships between them. Draw suitable ER/EER diagram for the system.
 
@@ -9,40 +9,23 @@ Design any database with at least two entities and relationships between them. D
 **System:** University Management (Student & Department)
 
 *   **Entities:**
-    *   `Department` (Parent Entity)
-    *   `Student` (Child Entity)
+        *   `Department` (Parent Entity)
+        *   `Student` (Child Entity)
 *   **Attributes:**
-    *   **Department:** `DeptID` (Primary Key, underlined), `DeptName`, `HOD`
-    *   **Student:** `RollNo` (Primary Key, underlined), `Name`, `Marks`, `City`, `DeptID` (Foreign Key)
+        *   **Department:** `DeptID` (Primary Key, underlined), `DeptName`, `HOD`
+        *   **Student:** `RollNo` (Primary Key, underlined), `Name`, `Marks`, `City`, `DeptID` (Foreign Key)
 *   **Relationship:**
-    *   `Belongs_To` (Many-to-One / M:1): Many Students (M) belong to One Department (1).
+        *   `Belongs_To` (Many-to-One / M:1): Many Students (M) belong to One Department (1).
 
-> **Drawing Note for Practical File:** Draw rectangles for `Student` and `Department`. Connect them with a diamond labeled `Belongs_To`. Attach attributes as ellipses to their respective entities. Underline `DeptID` and `RollNo` to denote primary keys. Mark the connecting lines with 'M' on the Student side and '1' on the Department side.
+> **Drawing Note for Practical Record:** Draw rectangles for `Student` and `Department`. Connect them with a diamond labeled `Belongs_To`. Attach attributes as ellipses to their respective entities. Underline `DeptID` and `RollNo` to denote primary keys. Mark the connecting lines with 'M' on the Student side and '1' on the Department side.
 
-## 2. SQL Queries (DDL)
+---
 
-```sql
--- Step 1: Create and use the database
-CREATE DATABASE UniversityDB;
-USE UniversityDB;
+## 2. Terminal & SQL Execution Steps
 
--- Step 2: Create the Parent Table (Department)
--- Must be created first because Student depends on it
-CREATE TABLE Department (
-    DeptID INT PRIMARY KEY,
-    DeptName VARCHAR(50) NOT NULL,
-    HOD VARCHAR(50)
-);
+**Step 1: Accessing MySQL in Ubuntu Terminal**
+Open your terminal (`Ctrl + Alt + T`) and log into the MySQL monitor. 
 
--- Step 3: Create the Child Table (Student)
--- Establishes relationship using Foreign Key
-CREATE TABLE Student (
-    RollNo INT PRIMARY KEY,
-    Name VARCHAR(50) NOT NULL,
-    Marks FLOAT,
-    City VARCHAR(50),
-    DeptID INT,
-    FOREIGN KEY (DeptID) REFERENCES Department(DeptID) 
-    ON DELETE SET NULL 
-    ON UPDATE CASCADE
-);
+```bash
+# Log in as root user (you will be prompted for your MySQL password)
+mysql -u root -p
