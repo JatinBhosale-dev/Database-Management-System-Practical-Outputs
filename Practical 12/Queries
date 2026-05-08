@@ -1,0 +1,46 @@
+-- Setup: Create database, table, and insert sample students (without grades yet)
+CREATE DATABASE IF NOT EXISTS Practical12DB; USE Practical12DB; CREATE TABLE IF NOT EXISTS StudentResult (RollNo INT PRIMARY KEY, Name VARCHAR(50), Marks FLOAT, Grade VARCHAR(20));
+INSERT INTO StudentResult (RollNo, Name, Marks) VALUES (1, 'Aditya', 85.0), (2, 'Rahul', 65.0), (3, 'Sneha', 35.0);
+
+-- Change the delimiter from ; to //
+DELIMITER //
+
+-- Create the Stored Procedure using Conditional Statements
+CREATE PROCEDURE AssignGrade(IN p_RollNo INT)
+BEGIN
+    DECLARE v_Marks FLOAT;
+    DECLARE v_Grade VARCHAR(20);
+
+    -- Fetch the marks for the given student and store it in the variable
+    SELECT Marks INTO v_Marks FROM StudentResult WHERE RollNo = p_RollNo;
+
+    -- Apply Conditional Logic
+    IF v_Marks >= 75.0 THEN
+        SET v_Grade = 'Distinction';
+    ELSEIF v_Marks >= 60.0 THEN
+        SET v_Grade = 'First Class';
+    ELSEIF v_Marks >= 40.0 THEN
+        SET v_Grade = 'Pass';
+    ELSE
+        SET v_Grade = 'Fail';
+    END IF;
+
+    -- Update the student's record with the calculated grade
+    UPDATE StudentResult SET Grade = v_Grade WHERE RollNo = p_RollNo;
+END //
+
+-- VERY IMPORTANT: Change the delimiter back to standard semicolon
+DELIMITER ;
+
+Verification 
+
+-- Check the table before calling the procedure (Grades will be NULL)
+SELECT * FROM StudentResult;
+
+-- Call the procedure for all three students
+CALL AssignGrade(1);
+CALL AssignGrade(2);
+CALL AssignGrade(3);
+
+-- Check the table after calling (Grades will now be populated based on the IF conditions)
+SELECT * FROM StudentResult;
