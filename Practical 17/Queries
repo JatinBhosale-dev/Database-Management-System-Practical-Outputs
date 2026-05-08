@@ -1,0 +1,44 @@
+Database Setup
+-- Setup: Create database, table, and insert sample students
+CREATE DATABASE IF NOT EXISTS Practical17DB; USE Practical17DB; CREATE TABLE IF NOT EXISTS Student (RollNo INT PRIMARY KEY, Name VARCHAR(50), Marks FLOAT);
+INSERT INTO Student VALUES (1, 'Aditya', 88.5), (2, 'Rahul', 72.0), (3, 'Sneha', 91.0), (4, 'Vikram', 65.0);
+
+Creating the User-Defined Function
+-- Change the delimiter from ; to //
+DELIMITER //
+
+-- Create the Function
+CREATE FUNCTION CheckScholarship(student_marks FLOAT) 
+RETURNS VARCHAR(15)
+DETERMINISTIC
+BEGIN
+    -- Declare a variable to hold the result
+    DECLARE eligibility_status VARCHAR(15);
+
+    -- Conditional logic to determine the return value
+    IF student_marks >= 85.0 THEN
+        SET eligibility_status = 'Eligible';
+    ELSE
+        SET eligibility_status = 'Not Eligible';
+    END IF;
+
+    -- The function MUST return a value
+    RETURN eligibility_status;
+END //
+
+-- Change the delimiter back to standard semicolon
+DELIMITER ;
+
+Verification (Using the Function)
+-- Call the function inside a SELECT statement
+SELECT RollNo, Name, Marks, CheckScholarship(Marks) AS Scholarship_Status FROM Student;
+
+-- You can also use functions in the WHERE clause!
+SELECT Name FROM Student WHERE CheckScholarship(Marks) = 'Eligible';
+
+Managing Functions
+-- View all custom functions you have created in this database
+SHOW FUNCTION STATUS WHERE Db = 'Practical17DB';
+
+-- Delete the function
+DROP FUNCTION CheckScholarship;
