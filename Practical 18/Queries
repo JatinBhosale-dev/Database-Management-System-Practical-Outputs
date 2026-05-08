@@ -1,0 +1,40 @@
+Database Setup & Trigger Creation
+-- Setup: Create database and the two tables
+CREATE DATABASE IF NOT EXISTS Practical18DB; USE Practical18DB; CREATE TABLE IF NOT EXISTS Student (RollNo INT PRIMARY KEY, Name VARCHAR(50), Marks FLOAT); CREATE TABLE IF NOT EXISTS StudentBackup (BackupID INT AUTO_INCREMENT PRIMARY KEY, RollNo INT, Name VARCHAR(50), DeletedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+
+-- Insert sample students
+INSERT INTO Student (RollNo, Name, Marks) VALUES (1, 'Aditya', 85.0), (2, 'Rahul', 72.0), (3, 'Sneha', 91.0);
+
+-- Change the delimiter from ; to //
+DELIMITER //
+
+-- Create the Trigger
+CREATE TRIGGER BackupBeforeDelete
+BEFORE DELETE ON Student
+FOR EACH ROW
+BEGIN
+    -- We use OLD.RollNo and OLD.Name to grab the data of the row that is about to be deleted
+    INSERT INTO StudentBackup (RollNo, Name) VALUES (OLD.RollNo, OLD.Name);
+END //
+
+-- Change the delimiter back to standard semicolon
+DELIMITER ;
+
+Verification (Firing the Trigger)
+-- 1. Check current tables (Student has 3 records, Backup is empty)
+SELECT * FROM Student;
+SELECT * FROM StudentBackup;
+
+-- 2. Delete Rahul's record from the main table (THIS FIRES THE TRIGGER)
+DELETE FROM Student WHERE RollNo = 2;
+
+-- 3. Verify the result! (Rahul is gone from Student, but automatically appeared in StudentBackup)
+SELECT * FROM Student;
+SELECT * FROM StudentBackup;
+
+Managing Triggers
+-- View all triggers in the current database
+SHOW TRIGGERS;
+
+-- Delete the trigger if you want to rewrite it
+DROP TRIGGER BackupBeforeDelete;
