@@ -1,0 +1,21 @@
+-- Setup: Create database, table, and insert sample records
+CREATE DATABASE IF NOT EXISTS Practical10DB; USE Practical10DB; CREATE TABLE IF NOT EXISTS Student (RollNo INT PRIMARY KEY, Name VARCHAR(50), Email VARCHAR(100), City VARCHAR(50));
+INSERT INTO Student (RollNo, Name, Email, City) VALUES (1, 'Aditya', 'adi@test.com', 'Pune'), (2, 'Rahul', 'rahul@test.com', 'Mumbai'), (3, 'Sneha', 'sneha@test.com', 'Pune');
+
+-- 1. Create a Standard Index: Speeds up searches based on the 'City' column
+CREATE INDEX idx_city ON Student (City);
+
+-- 2. Create a Unique Index: Speeds up searches AND ensures no duplicate emails can be entered
+CREATE UNIQUE INDEX idx_email ON Student (Email);
+
+-- 3. Drop an Index: Remove the 'idx_city' index if it is no longer needed
+DROP INDEX idx_city ON Student;
+
+Verification
+-- View all indexes attached to the Student table
+SHOW INDEX FROM Student;
+
+Added context not necessary 
+-- prove that the index makes retrieval faster, use the EXPLAIN keyword before a SELECT query. It shows how MySQL executes the search.
+-- This will output a table showing that it used 'idx_email' to find the row, rather than scanning the whole table
+EXPLAIN SELECT * FROM Student WHERE Email = 'adi@test.com';
