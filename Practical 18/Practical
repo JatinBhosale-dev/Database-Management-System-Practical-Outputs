@@ -1,0 +1,27 @@
+# Practical 18: Implement Triggers for Given Database
+
+**Question:** Implement triggers for given database.
+
+## 1. Concept Overview
+
+A **Trigger** is a special type of stored program that automatically "fires" (executes) when a specific event occurs in the database. You don't call them manually; the database engine runs them automatically.
+
+Triggers are defined by three main things:
+1.  **The Event:** `INSERT`, `UPDATE`, or `DELETE`.
+2.  **The Timing:** `BEFORE` or `AFTER` the event.
+3.  **The Table:** Which table the trigger is attached to.
+
+**Crucial Viva Concept (`NEW` vs `OLD`):** 
+Inside a trigger, you can access the data being changed using two special keywords:
+*   `NEW`: Refers to the new data being inserted or updated (available in `INSERT` and `UPDATE` triggers).
+*   `OLD`: Refers to the old data before it was updated or deleted (available in `UPDATE` and `DELETE` triggers).
+
+---
+
+## 2. Terminal & SQL Execution Steps
+
+**Step 1: Accessing MySQL in Ubuntu Terminal**
+Open your terminal (`Ctrl + Alt + T`) and log into the MySQL monitor.
+
+```bash
+mysql -u root -p
