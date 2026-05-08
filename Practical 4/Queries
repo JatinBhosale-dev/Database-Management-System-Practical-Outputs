@@ -1,0 +1,21 @@
+-- Setup: Create a database and table for the DML operations
+CREATE DATABASE IF NOT EXISTS Practical4DB; USE Practical4DB; CREATE TABLE IF NOT EXISTS Student (RollNo INT PRIMARY KEY, Name VARCHAR(50), Marks FLOAT, City VARCHAR(50));
+
+-- 1. INSERT: Add multiple new records into the Student table
+INSERT INTO Student (RollNo, Name, Marks, City) VALUES (1, 'Aditya', 85.5, 'Pune'), (2, 'Rahul', 78.0, 'Mumbai'), (3, 'Sneha', 92.5, 'Satara');
+
+-- 2. UPDATE: Modify the marks of a specific student
+UPDATE Student SET Marks = 88.0 WHERE RollNo = 2;
+
+-- 3. UPDATE: Change the city for multiple students at once based on a condition
+UPDATE Student SET City = 'Nashik' WHERE Marks > 90;
+
+-- 4. DELETE: Remove a specific student record from the table
+DELETE FROM Student WHERE RollNo = 1;
+
+** Verification**
+-- View all data in the table (run this after INSERT, UPDATE, and DELETE to show changes)
+SELECT * FROM Student;
+
+-- View specific data (e.g., checking if Rahul's marks were updated)
+SELECT Name, Marks FROM Student WHERE RollNo = 2;
