@@ -1,0 +1,40 @@
+-- Setup: Create database and a table to store the loop results
+CREATE DATABASE IF NOT EXISTS Practical13DB; USE Practical13DB; CREATE TABLE IF NOT EXISTS NumberSeries (Num INT);
+
+-- Change the delimiter
+DELIMITER //
+
+-- Create the Stored Procedure using a WHILE Loop
+CREATE PROCEDURE GenerateNumbers(IN p_MaxNumber INT)
+BEGIN
+    -- Declare a counter variable and initialize it to 1
+    DECLARE v_Counter INT DEFAULT 1;
+
+    -- Optional: Clear the table before running so we get fresh results each time
+    TRUNCATE TABLE NumberSeries;
+
+    -- Start the iterative statement
+    WHILE v_Counter <= p_MaxNumber DO
+        -- Action to perform inside the loop
+        INSERT INTO NumberSeries (Num) VALUES (v_Counter);
+        
+        -- Increment the counter (CRITICAL: without this, you create an infinite loop)
+        SET v_Counter = v_Counter + 1;
+    END WHILE;
+
+END //
+
+-- Change the delimiter back to standard semicolon
+DELIMITER ;
+
+Verification 
+
+-- Call the procedure to run the loop 5 times
+CALL GenerateNumbers(5);
+
+-- Verify the loop successfully inserted rows 1 through 5
+SELECT * FROM NumberSeries;
+
+-- You can test it again with a different number
+CALL GenerateNumbers(10);
+SELECT * FROM NumberSeries;
