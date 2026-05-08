@@ -1,0 +1,39 @@
+-- Setup: Create database and a table with a Primary Key to force a duplicate error
+CREATE DATABASE IF NOT EXISTS Practical14DB; USE Practical14DB; CREATE TABLE IF NOT EXISTS StudentData (RollNo INT PRIMARY KEY, Name VARCHAR(50));
+
+-- Insert a baseline record so we have something to duplicate later
+INSERT INTO StudentData VALUES (1, 'Aditya');
+
+-- Change the delimiter from ; to //
+DELIMITER //
+
+-- Create the Stored Procedure with an EXIT HANDLER for predefined exceptions
+CREATE PROCEDURE SafeInsertStudent(IN p_RollNo INT, IN p_Name VARCHAR(50))
+BEGIN
+    -- Declare an EXIT handler specifically for the predefined SQLSTATE '23000' (Duplicate Entry)
+    DECLARE EXIT HANDLER FOR SQLSTATE '23000'
+    BEGIN
+        -- This block only runs if the duplicate exception is triggered
+        SELECT 'EXCEPTION CAUGHT: Duplicate Roll Number! Insert operation aborted.' AS ErrorMessage;
+    END;
+
+    -- Attempt to insert the new record
+    INSERT INTO StudentData (RollNo, Name) VALUES (p_RollNo, p_Name);
+
+    -- If the insert is successful (no exception), the procedure continues to this line
+    SELECT CONCAT('SUCCESS: Student ', p_Name, ' added successfully.') AS SuccessMessage;
+END //
+
+-- Change the delimiter back to standard semicolon
+DELIMITER ;            
+
+Verification 
+-- Test 1: Insert a brand new student (This will SUCCEED)
+CALL SafeInsertStudent(2, 'Rahul');
+
+-- Test 2: Try to insert another student with RollNo 1 (This will TRIGGER THE EXCEPTION)
+-- Without the handler, MySQL would throw "ERROR 1062 (23000)". With our handler, it prints our custom message.
+CALL SafeInsertStudent(1, 'Sneha');
+
+-- Verify the table data (Only Aditya and Rahul should be there)
+SELECT * FROM StudentData;
